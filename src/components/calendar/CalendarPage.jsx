@@ -10,36 +10,39 @@ import { messages } from "../../helpers/calendar-messages";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "moment/locale/es";
 import { CalendarModal } from "./CalendarModal";
+import { uiOpenModal } from "../../actions/ui";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { eventSetActive } from "../../actions/events";
+import { AddNewFab } from "../ui/AddNewFab";
 
 moment.locale("es");
 
 const localizer = momentLocalizer(moment);
-const events = [
-    {
-        title: "Cumpleaños",
-        start: moment().toDate(),
-        end: moment().add(2, "hours").toDate(),
-        user: { _id: "123", name: "Ivan" },
-    },
-];
 
 export const CalendarPage = () => {
+    const dispatch = useDispatch();
+    const { events } = useSelector((state) => state.event);
+
     const [lastView, setLastView] = useState(
         localStorage.getItem("lastView") || "month"
     );
 
     const onDoubleClick = (e) => {
-        console.log(e);
+        dispatch(uiOpenModal());
+        dispatch(eventSetActive(e));
     };
 
-    const onSelect = (e) => {};
+    const onSelect = (e) => {
+        // dispatch(eventSetActive(e));
+    };
 
     const onViewChange = (e) => {
         setLastView(e);
         localStorage.setItem("lastView", e);
     };
 
-    const eventStyleGetter = (event, start, end, isSelected) => {
+    const eventStyleGetter = () => {
         const style = {
             backgroundColor: "#367CF7",
             borderRadius: "0",
@@ -67,6 +70,7 @@ export const CalendarPage = () => {
                 view={lastView}
             />
             <CalendarModal />
+            <AddNewFab></AddNewFab>
         </div>
     );
 };
