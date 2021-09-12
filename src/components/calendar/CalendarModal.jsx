@@ -9,7 +9,7 @@ import { uiCloseModal } from "../../actions/ui";
 import {
     eventAddNew,
     eventClearActive,
-    eventSetActive,
+    eventUpdated,
 } from "../../actions/events";
 
 const customStyles = {
@@ -50,6 +50,10 @@ export const CalendarModal = () => {
             setFormValues({ ...activeEvent });
             setStartDate(activeEvent.start);
             setEndDate(activeEvent.end);
+        } else {
+            reset();
+            setStartDate(nowMoment.toDate());
+            setEndDate(endMoment.toDate());
         }
     }, [activeEvent, setFormValues]);
 
@@ -88,15 +92,17 @@ export const CalendarModal = () => {
             return Swal.fire("Error", "El titulo es demasiado corto", "error");
         }
 
-        formValues.id = "";
-
-        dispatch(
-            eventAddNew({
-                ...formValues,
-                id: new Date().getTime(),
-                user: { _id: "123", name: "Ivan" },
-            })
-        );
+        if (activeEvent) {
+            dispatch(eventUpdated(formValues));
+        } else {
+            dispatch(
+                eventAddNew({
+                    ...formValues,
+                    id: new Date().getTime(),
+                    user: { _id: "123", name: "Ivan" },
+                })
+            );
+        }
         closeModal();
     };
 
@@ -109,7 +115,7 @@ export const CalendarModal = () => {
             closeTimeoutMS={200}
             overlayClassName={"modal-fondo"}
         >
-            <h1> Nuevo evento </h1>
+            <h1> {activeEvent ? "Editar evento" : "Nuevo evento"} </h1>
             <hr />
             <form className="container" onSubmit={handleOnSubmit}>
                 <div className="form-group">
