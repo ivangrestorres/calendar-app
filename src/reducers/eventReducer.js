@@ -1,17 +1,16 @@
-import moment from "moment";
 import { types } from "../types/types";
 
+// {
+//     id: new Date().getTime(),
+//     title: "Cumpleaños",
+//     start: moment().toDate(),
+//     end: moment().add(2, "hours").toDate(),
+//     notes: "",
+//     user: { _id: "123", name: "Ivan" },
+// }
+
 const initalState = {
-    events: [
-        {
-            id: new Date().getTime(),
-            title: "Cumpleaños",
-            start: moment().toDate(),
-            end: moment().add(2, "hours").toDate(),
-            notes: "",
-            user: { _id: "123", name: "Ivan" },
-        },
-    ],
+    events: [],
     activeEvent: null,
 };
 
@@ -38,6 +37,8 @@ export const eventReducer = (state = initalState, action) => {
             };
         case types.eventClearActive:
             return { ...state, activeEvent: null };
+        case types.eventLoaded:
+            return { ...state, events: [...action.payload] };
         default:
             return state;
     }
