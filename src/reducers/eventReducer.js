@@ -39,6 +39,8 @@ export const eventReducer = (state = initalState, action) => {
             return { ...state, activeEvent: null };
         case types.eventLoaded:
             return { ...state, events: [...action.payload] };
+        case types.eventClean:
+            return { ...initalState };
         default:
             return state;
     }

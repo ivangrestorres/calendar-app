@@ -119,3 +119,7 @@ const eventLoaded = (events) => ({
     type: types.eventLoaded,
     payload: events,
 });
+
+export const eventClean = () => ({
+    type: types.eventClean,
+});
